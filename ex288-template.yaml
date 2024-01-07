@@ -1,8 +1,8 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 labels:
-  app: ex288-php-mysql
-  template: php-app
+  app: cakephp-mysql-example
+  template: cakephp-mysql-example
 message: |-
   The following service(s) have been created in your project: ${NAME}, ${DATABASE_SERVICE_NAME}.
 
@@ -29,8 +29,6 @@ metadata:
   creationTimestamp: "2022-01-05T12:07:34Z"
   labels:
     samples.operator.openshift.io/managed: "true"
-  name: ex288-php-mysql
-  namespace: japan
   resourceVersion: "16364"
   uid: 7a390eec-3ce1-40e7-9927-5bc804540031
 objects:
@@ -38,8 +36,6 @@ objects:
   kind: Secret
   metadata:
     name: ${NAME}
-    labels: 
-     template: php-app
   stringData:
     cakephp-secret-token: ${CAKEPHP_SECRET_TOKEN}
     cakephp-security-salt: ${CAKEPHP_SECURITY_SALT}
@@ -53,8 +49,6 @@ objects:
       service.alpha.openshift.io/dependencies: '[{"name": "${DATABASE_SERVICE_NAME}",
         "kind": "Service"}]'
     name: ${NAME}
-    labels: 
-     template: php-app
   spec:
     ports:
     - name: web
@@ -66,8 +60,6 @@ objects:
   kind: Route
   metadata:
     name: ${NAME}
-    labels: 
-     template: php-app
   spec:
     host: ${APPLICATION_DOMAIN}
     to:
@@ -79,8 +71,6 @@ objects:
     annotations:
       description: Keeps track of changes in the application image
     name: ${NAME}
-    labels:
-     template: php-app
 - apiVersion: v1
   kind: BuildConfig
   metadata:
@@ -88,8 +78,6 @@ objects:
       description: Defines how to build the application
       template.alpha.openshift.io/wait-for-ready: "true"
     name: ${NAME}
-    labels: 
-     template: php-app
   spec:
     output:
       to:
@@ -126,8 +114,6 @@ objects:
       description: Defines how to deploy the application server
       template.alpha.openshift.io/wait-for-ready: "true"
     name: ${NAME}
-    labels: 
-     template: php-app
   spec:
     replicas: 1
     selector:
@@ -214,8 +200,6 @@ objects:
     annotations:
       description: Exposes the database server
     name: ${DATABASE_SERVICE_NAME}
-    labels: 
-     template: php-app
   spec:
     ports:
     - name: mysql
@@ -230,8 +214,6 @@ objects:
       description: Defines how to deploy the database
       template.alpha.openshift.io/wait-for-ready: "true"
     name: ${DATABASE_SERVICE_NAME}
-    labels: 
-     template: php-app
   spec:
     replicas: 1
     selector:
@@ -347,7 +329,6 @@ parameters:
     blank a value will be defaulted.
   displayName: Application Hostname
   name: APPLICATION_DOMAIN
-  required: true
   value: php-app-japan.apps-crc.testing
 - description: Github trigger secret.  A difficult to guess string encoded as part
     of the webhook URL.  Not encrypted.
@@ -399,8 +380,5 @@ parameters:
   displayName: MySQL authentication plugin
   name: MYSQL_DEFAULT_AUTHENTICATION_PLUGIN
   value: mysql_native_password
-- description: test
-  name: Hello
-  required: false
-  value: ‘Audience’
+
 
